@@ -6,13 +6,6 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 
 import {
-  screenshotToolName,
-  screenshotToolDescription,
-  ScreenshotToolSchema,
-  runScreenshotTool,
-} from "./tools/screenshot.js";
-
-import {
   architectToolName,
   architectToolDescription,
   ArchitectToolSchema,
@@ -27,10 +20,9 @@ import {
 } from "./tools/codeReview.js";
 
 /**
- * A minimal MCP server providing three Cursor Tools:
- *   1) Screenshot
- *   2) Architect
- *   3) CodeReview
+ * A minimal MCP server providing two Cursor Tools:
+ *   1) Architect
+ *   2) CodeReview
  */
 
 // 1. Create an MCP server instance
@@ -50,30 +42,6 @@ const server = new Server(
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
-      {
-        name: screenshotToolName,
-        description: screenshotToolDescription,
-        inputSchema: {
-          type: "object",
-          properties: {
-            url: {
-              type: "string",
-              description: "Full URL to screenshot",
-            },
-            relativePath: {
-              type: "string",
-              description: "Relative path appended to http://localhost:3000",
-            },
-            fullPathToScreenshot: {
-              type: "string",
-              required: true,
-              description:
-                "Path to where the screenshot file should be saved. This should be a cwd-style full path to the file (not relative to the current working directory) including the file name and extension.",
-            },
-          },
-          required: [],
-        },
-      },
       {
         name: architectToolName,
         description: architectToolDescription,
@@ -116,10 +84,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
 
   switch (name) {
-    case screenshotToolName: {
-      const validated = ScreenshotToolSchema.parse(args);
-      return await runScreenshotTool(validated);
-    }
     case architectToolName: {
       const validated = ArchitectToolSchema.parse(args);
       return await runArchitectTool(validated);
