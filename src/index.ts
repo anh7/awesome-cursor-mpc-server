@@ -66,6 +66,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
             fullPathToScreenshot: {
               type: "string",
+              required: true,
               description:
                 "Path to where the screenshot file should be saved. This should be a cwd-style full path to the file (not relative to the current working directory) including the file name and extension.",
             },
